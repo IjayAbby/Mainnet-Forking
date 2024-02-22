@@ -28,8 +28,8 @@ const main = async () => {
     console.log("balance before swap", Number(usdcBal._hex), Number(daiBal._hex));
 
     await ROUTER.swapTokensForExactTokens(
-        ethers.utils.parseUnits("2000", "6"),
-        ethers.utils.parseUnits("1980", "18"),
+        ethers.parseUnits("2000", "6"),
+        ethers.parseUnits("1980", "18"),
         [USDCAddress, DAIAddress],
         impersonatedSigner.address,
         deadline

@@ -13,8 +13,8 @@ const main = async () => {
     await helpers.impersonateAccount(USDCHolder);
     const impersonatedSigner = await ethers.getSigner(USDCHolder);
 
-    const amountOut = ethers.parseUnits("2000", 6);
-    const amountIn = ethers.parseEther("1");
+    const amountInMax = ethers.parseUnits("2000", 6);
+    const amountOut = ethers.parseUnits("1", 18);
 
     const USDC = await ethers.getContractAt("IERC20", USDCAddress);
     const DAI = await ethers.getContractAt("IERC20", DAIAddress);
@@ -47,9 +47,21 @@ const main = async () => {
     //     deadline
     // );
 
-    const swapTx = await ROUTER.connect(impersonatedSigner).swapExactTokensForTokens(
+    // const swapTx = await ROUTER.connect(impersonatedSigner).swapExactTokensForTokens(
+    //     amountOut,
+    //     0
+    //     ,
+    //     [USDCAddress, DAIAddress],
+    //     impersonatedSigner.address,
+    //     deadline
+    // );
+
+    // await swapTx.wait();
+
+
+    const swapTx = await ROUTER.connect(impersonatedSigner).swapTokensForExactTokens(
         amountOut,
-        0
+        amountInMax
         ,
         [USDCAddress, DAIAddress],
         impersonatedSigner.address,
@@ -57,7 +69,6 @@ const main = async () => {
     );
 
     await swapTx.wait();
-
 
     // Uncomment this if you are using the swap tokens for ETH
     // const ethBalAfterSwap = await impersonatedSigner.provider.getBalance(USDCHolder);
